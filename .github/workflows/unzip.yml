@@ -15,7 +15,7 @@ jobs:
 
       - name: Extract ZIP
         run: |
-          unzip BtPad.zip -d extracted
+          unzip btpad.zip -d extracted
 
       - name: Copy files safely
         run: |
