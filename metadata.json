@@ -1,0 +1,6 @@
+{
+  "name": "Bluetooth Touchpad",
+  "description": "Turns your Android device into a wireless Bluetooth HID Touchpad, Mouse, and Keyboard for laptops and PCs without any software installation required.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
