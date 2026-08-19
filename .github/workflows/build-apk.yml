@@ -1,0 +1,88 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build Type (debug or release)'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make Gradlew Executable
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+          fi
+
+      - name: Build Debug APK
+        if: "${{ github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch' }}"
+        run: |
+          if [ -f "./gradlew" ]; then
+            ./gradlew :app:assembleDebug --stacktrace
+          else
+            gradle :app:assembleDebug --stacktrace
+          fi
+
+      - name: Build Release APK
+        if: "${{ github.event.inputs.build_type == 'release' }}"
+        run: |
+          if [ -f "./gradlew" ]; then
+            ./gradlew :app:assembleRelease --stacktrace
+          else
+            gradle :app:assembleRelease --stacktrace
+          fi
+
+      - name: Locate APK File
+        id: apk_location
+        run: |
+          echo "Finding generated APKs..."
+          find app/build/outputs/apk/ -type f -name "*.apk" || true
+
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BluetoothTouchpad-Debug-APK
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload Release APK Artifact
+        if: "${{ github.event.inputs.build_type == 'release' }}"
+        uses: actions/upload-artifact@v4
+        with:
+          name: BluetoothTouchpad-Release-APK
+          path: app/build/outputs/apk/release/*.apk
+          retention-days: 30
+          if-no-files-found: warn
+
