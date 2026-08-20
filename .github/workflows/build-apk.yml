@@ -1,4 +1,4 @@
-name: Build Android APK
+Name: Build Android APK
 
 on:
   push:
@@ -49,18 +49,18 @@ jobs:
         if: "${{ github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch' }}"
         run: |
           if [ -f "./gradlew" ]; then
-            ./gradlew :app:assembleDebug --stacktrace
+            ./gradlew assembleDebug -x test --stacktrace --no-daemon
           else
-            gradle :app:assembleDebug --stacktrace
+            gradle assembleDebug -x test --stacktrace --no-daemon
           fi
 
       - name: Build Release APK
         if: "${{ github.event.inputs.build_type == 'release' }}"
         run: |
           if [ -f "./gradlew" ]; then
-            ./gradlew :app:assembleRelease --stacktrace
+            ./gradlew assembleRelease -x test --stacktrace --no-daemon
           else
-            gradle :app:assembleRelease --stacktrace
+            gradle assembleRelease -x test --stacktrace --no-daemon
           fi
 
       - name: Locate APK File
@@ -85,4 +85,4 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
           retention-days: 30
           if-no-files-found: warn
-
+          
