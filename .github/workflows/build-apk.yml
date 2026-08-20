@@ -39,18 +39,21 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Make Gradlew Executable
-        run: chmod +x gradlew
-
       - name: Build Debug APK
         if: "${{ github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch' }}"
         run: |
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            gradle wrapper
+          fi
           chmod +x gradlew
           ./gradlew assembleDebug -x test --no-daemon
 
       - name: Build Release APK
         if: "${{ github.event.inputs.build_type == 'release' }}"
         run: |
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            gradle wrapper
+          fi
           chmod +x gradlew
           ./gradlew assembleRelease -x test --no-daemon
 
