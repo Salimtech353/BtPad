@@ -2,6 +2,7 @@ package com.example;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import com.aistudio.bttouchpad.mhid.R;
 
 /**
  * Custom GestureDetector.SimpleOnGestureListener handling touchpad interactions:
