@@ -45,23 +45,13 @@ jobs:
             chmod +x ./gradlew
           fi
 
-      - name: Build Debug APK
+            - name: Build Debug APK
         if: "${{ github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch' }}"
-        run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew assembleDebug -x test --stacktrace --no-daemon
-          else
-            gradle assembleDebug -x test --stacktrace --no-daemon
-          fi
+      
 
       - name: Build Release APK
         if: "${{ github.event.inputs.build_type == 'release' }}"
-        run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew assembleRelease -x test --stacktrace --no-daemon
-          else
-            gradle assembleRelease -x test --stacktrace --no-daemon
-          fi
+        run: ./gradlew assembleRelease -x test --no-daemon
 
       - name: Locate APK File
         id: apk_location
