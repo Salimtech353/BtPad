@@ -1,5 +1,6 @@
 package com.example;
 
+import com.aistudio.bttouchpad.mhid.R;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
